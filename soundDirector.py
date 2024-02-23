@@ -6,7 +6,7 @@ import Constants
 
 def soundDirector(mainWindow, labelMinuteToWait, entryChooseMaximumMinute, entryChooseMinimumMinute) :
     try : 
-        current_time =datetime.now()
+        currentTime =datetime.now()
 
         labelMinuteToWait['text'] = globalVariables.nextTimeSoundWillPlay
 
@@ -14,19 +14,19 @@ def soundDirector(mainWindow, labelMinuteToWait, entryChooseMaximumMinute, entry
             globalVariables.nextTimeSoundWillPlay = globalVariables.nextTimeSoundWillPlay - 60
             globalVariables.hourHaveChanged = True
 
-        if current_time.minute == 0 :
+        if currentTime.minute == 0 :
             globalVariables.hourHaveChanged = False
 
-        if current_time.minute >= globalVariables.nextTimeSoundWillPlay and not globalVariables.hourHaveChanged :
+        if currentTime.minute >= globalVariables.nextTimeSoundWillPlay and not globalVariables.hourHaveChanged :
             
             try :
                 if int(entryChooseMaximumMinute.get()) >= 0 and int(entryChooseMaximumMinute.get()) <= 60 and int(entryChooseMinimumMinute.get()) >= 0 and int(entryChooseMinimumMinute.get()) < 60 and int(entryChooseMinimumMinute.get()) <= int(entryChooseMaximumMinute.get()) : 
-                    globalVariables.nextTimeSoundWillPlay = current_time.minute + randint(int(entryChooseMinimumMinute.get()),int(entryChooseMaximumMinute.get()))
+                    globalVariables.nextTimeSoundWillPlay = currentTime.minute + randint(int(entryChooseMinimumMinute.get()),int(entryChooseMaximumMinute.get()))
                 else :
-                    globalVariables.nextTimeSoundWillPlay = current_time.minute + randint(Constants.MIN_MINUTE_TO_WAIT,Constants.MAX_MINUTE_TO_WAIT)
+                    globalVariables.nextTimeSoundWillPlay = currentTime.minute + randint(Constants.MIN_MINUTE_TO_WAIT,Constants.MAX_MINUTE_TO_WAIT)
                 
             except Exception as e :
-                globalVariables.nextTimeSoundWillPlay = current_time.minute + randint(Constants.MIN_MINUTE_TO_WAIT,Constants.MAX_MINUTE_TO_WAIT)
+                globalVariables.nextTimeSoundWillPlay = currentTime.minute + randint(Constants.MIN_MINUTE_TO_WAIT,Constants.MAX_MINUTE_TO_WAIT)
                 print(e)
             
 
