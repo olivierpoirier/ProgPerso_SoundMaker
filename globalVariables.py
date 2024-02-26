@@ -15,3 +15,6 @@ listOfImages = loadDataFileInList(Constants.LIST_IMAGES_PATH)
 
 global listOfSounds
 listOfSounds = loadDataFileInList(Constants.LIST_SOUNDS_PATH)
+
+global isTimeToPlay1RandomSound
+isTimeToPlay1RandomSound = False

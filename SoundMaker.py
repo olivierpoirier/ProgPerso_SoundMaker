@@ -6,12 +6,19 @@ from tkinter import Entry
 from PIL import Image
 from PIL import ImageTk
 from changeBGImage import changeBackgroundImage
-from soundDirector import soundDirector
+from soundDirector import soundDirectorForTimedSound
+from soundDirector import soundDirectorForButtonSoundClicked
 from datetime import datetime
 from random import randint
 import globalVariables
 import Constants
 from playRandomSound import playRandomSound
+import threading
+
+
+
+def make1SoundPlay() :
+    globalVariables.isTimeToPlay1RandomSound = True
 
 try : 
     mainWindow = Tk()
@@ -27,6 +34,7 @@ try :
     
     frameDisplayText = Frame(mainFrameLeft, width=Constants.WIDTH_OF_IMAGE_FRAME, height=Constants.HEIGHT_OF_TEXT_FRAME, bg=Constants.BACKGROUND_COLOR,highlightbackground=Constants.BORDER_COLOR, highlightthickness=Constants.BORDER_TICKNESS)
     labelMinuteToWait = Label(frameDisplayText, text=globalVariables.nextTimeSoundWillPlay, bg = Constants.BACKGROUND_COLOR, font=Constants.FONT,fg=Constants.COLOR_TEXT)
+    
 
     frameImage = Frame(mainFrameLeft, width=Constants.WIDTH_OF_IMAGE_FRAME, height=Constants.WIDTH_OF_WIN, bg=Constants.BACKGROUND_COLOR, highlightbackground=Constants.BORDER_COLOR, highlightthickness=Constants.BORDER_TICKNESS)
     image = Image.open(Constants.LIST_IMAGES_PATH + globalVariables.listOfImages[0]).resize((Constants.WIDTH_OF_WIN, Constants.WIDTH_OF_WIN))
@@ -49,8 +57,9 @@ try :
     entryChooseMaximumMinute = Entry(frameOptions)
     entryChooseMaximumMinute.insert(1, Constants.MAX_MINUTE_TO_WAIT)
     labelExplainOption7 = Label(frameOptions, text='Play random sound : ', bg=Constants.BACKGROUND_COLOR_OPTIONS)
-    buttonPlayRandomSound = Button(frameOptions, text='Play!', command=playRandomSound)
 
+
+    buttonPlayRandomSound = Button(frameOptions, text='Play!', command=make1SoundPlay)
 
 
     labelMinuteToWait.pack(side='top')
@@ -80,11 +89,11 @@ try :
     frameImage.pack_propagate(False)
     frameOptions.pack_propagate(False)
 
-    currentTime = datetime.now()
-    globalVariables.nextTimeSoundWillPlay = currentTime.minute + randint(Constants.MIN_MINUTE_TO_WAIT,Constants.MAX_MINUTE_TO_WAIT)
 
 
-    mainWindow.after(100, lambda:soundDirector(mainWindow, labelMinuteToWait, entryChooseMaximumMinute, entryChooseMinimumMinute))
+    threading.Thread(target=soundDirectorForTimedSound(mainWindow, labelMinuteToWait, entryChooseMaximumMinute, entryChooseMinimumMinute), daemon=True).start()
+    threading.Thread(target=soundDirectorForButtonSoundClicked(mainWindow), daemon=True).start()
+
     mainWindow.mainloop()
 except Exception as e :
     print(e)

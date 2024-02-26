@@ -4,11 +4,13 @@ import globalVariables
 from playRandomSound import playRandomSound
 import Constants
 
-def soundDirector(mainWindow, labelMinuteToWait, entryChooseMaximumMinute, entryChooseMinimumMinute) :
+def soundDirectorForTimedSound(mainWindow, labelMinuteToWait, entryChooseMaximumMinute, entryChooseMinimumMinute) :
     try : 
         currentTime =datetime.now()
 
         labelMinuteToWait['text'] = globalVariables.nextTimeSoundWillPlay
+
+        
 
         if globalVariables.nextTimeSoundWillPlay >= 60 :
             globalVariables.nextTimeSoundWillPlay = globalVariables.nextTimeSoundWillPlay - 60
@@ -33,6 +35,19 @@ def soundDirector(mainWindow, labelMinuteToWait, entryChooseMaximumMinute, entry
             playRandomSound()
         
         print(globalVariables.nextTimeSoundWillPlay)
-        mainWindow.after(10000, lambda:soundDirector(mainWindow, labelMinuteToWait, entryChooseMaximumMinute, entryChooseMinimumMinute))
+
+        mainWindow.after(10000, lambda:soundDirectorForTimedSound(mainWindow, labelMinuteToWait, entryChooseMaximumMinute, entryChooseMinimumMinute))
+    except Exception as e :
+        print(e)
+
+
+def soundDirectorForButtonSoundClicked(mainWindow) :
+    try : 
+        
+        if globalVariables.isTimeToPlay1RandomSound :
+            playRandomSound()
+            globalVariables.isTimeToPlay1RandomSound = False
+
+        mainWindow.after(1000, lambda:soundDirectorForButtonSoundClicked(mainWindow))
     except Exception as e :
         print(e)
